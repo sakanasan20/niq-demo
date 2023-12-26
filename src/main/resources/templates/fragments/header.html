@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html 
+	xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>NIQ</title>
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/dist/css/bootstrap.min.css}">
+  </head>
+</head>
+<body>
+	<header th:fragment="header">
+		<div class="navbar navbar-dark bg-dark shadow-sm">
+			<div class="container">
+				<a href="#" class="navbar-brand d-flex align-items-center"> <strong>Header</strong>
+				</a>
+			</div>
+		</div>
+	</header>
+
+	<script th:src="@{/webjars/bootstrap/5.3.2/dist/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
