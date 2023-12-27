@@ -34,7 +34,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import tw.niq.demo.domain.Beer;
+import tw.niq.demo.dto.BeerDto;
 import tw.niq.demo.exception.NotFoundException;
 import tw.niq.demo.service.BeerService;
 import tw.niq.demo.service.BeerServiceImpl;
@@ -52,15 +52,15 @@ class BeerControllerTest {
 	ArgumentCaptor<UUID> uuidArgumentCaptor;
 	
 	@Captor
-	ArgumentCaptor<Beer> beerArgumentCaptor;
+	ArgumentCaptor<BeerDto> beerArgumentCaptor;
 	
 	BeerServiceImpl beerServiceImpl;
 	
 	ObjectMapper objectMapper;
 	
-	List<Beer> testBeers;
+	List<BeerDto> testBeers;
 	
-	Beer testBeer; 
+	BeerDto testBeer; 
 	
 	@BeforeEach
 	void setUp() throws Exception {
@@ -113,10 +113,10 @@ class BeerControllerTest {
 	@Test
 	void testCreateBeer() throws Exception {
 		
-		Beer beer = testBeer;
+		BeerDto beer = testBeer;
 		beer.setId(null);
 		
-		given(beerService.createBeer(any(Beer.class))).willReturn(testBeers.get(1));
+		given(beerService.createBeer(any(BeerDto.class))).willReturn(testBeers.get(1));
 		
 		mockMvc.perform(post(BeerController.PATH_V1_BEER)
 				.content(objectMapper.writeValueAsString(beer))
@@ -133,7 +133,7 @@ class BeerControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNoContent());
 		
-		verify(beerService).updateBeerById(any(UUID.class), any(Beer.class));
+		verify(beerService).updateBeerById(any(UUID.class), any(BeerDto.class));
 	}
 
 	@Test

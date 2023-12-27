@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import tw.niq.demo.domain.Customer;
+import tw.niq.demo.dto.CustomerDto;
 import tw.niq.demo.service.CustomerService;
 
 @RequiredArgsConstructor
@@ -31,21 +31,21 @@ public class CustomerController {
 	private final CustomerService customerService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public List<Customer> getCustomers() {
+	public List<CustomerDto> getCustomers() {
 
 		return customerService.getCustomers();
 	}
 
 	@RequestMapping(value = "/{customerId}", method = RequestMethod.GET)
-	public Customer getCustomerById(@PathVariable("customerId") UUID id) {
+	public CustomerDto getCustomerById(@PathVariable("customerId") UUID id) {
 
 		return customerService.getCustomerById(id);
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> createCustomer(@RequestBody Customer customer) {
+	public ResponseEntity<Void> createCustomer(@RequestBody CustomerDto customer) {
 
-		Customer savedCustomer = customerService.createCustomer(customer);
+		CustomerDto savedCustomer = customerService.createCustomer(customer);
 
 		HttpHeaders headers = new HttpHeaders();
 
@@ -56,7 +56,7 @@ public class CustomerController {
 	}
 
 	@PutMapping("{customerId}")
-	public ResponseEntity<Void> updateCustomerById(@PathVariable("customerId") UUID id, @RequestBody Customer customer) {
+	public ResponseEntity<Void> updateCustomerById(@PathVariable("customerId") UUID id, @RequestBody CustomerDto customer) {
 
 		customerService.updateCustomerById(id, customer);
 
@@ -64,7 +64,7 @@ public class CustomerController {
 	}
 
 	@PatchMapping("{customerId}")
-	public ResponseEntity<Void> patchCustomerById(@PathVariable("customerId") UUID id, @RequestBody Customer customer) {
+	public ResponseEntity<Void> patchCustomerById(@PathVariable("customerId") UUID id, @RequestBody CustomerDto customer) {
 
 		customerService.patchCustomerById(id, customer);
 

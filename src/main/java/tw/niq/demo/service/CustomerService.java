@@ -3,19 +3,19 @@ package tw.niq.demo.service;
 import java.util.List;
 import java.util.UUID;
 
-import tw.niq.demo.domain.Customer;
+import tw.niq.demo.dto.CustomerDto;
 
 public interface CustomerService {
 
-	List<Customer> getCustomers();
+	List<CustomerDto> getCustomers();
 
-	Customer getCustomerById(UUID id);
+	CustomerDto getCustomerById(UUID id);
 
-	Customer createCustomer(Customer customer);
+	CustomerDto createCustomer(CustomerDto customer);
 
-	void updateCustomerById(UUID id, Customer customer);
+	void updateCustomerById(UUID id, CustomerDto customer);
 
-	void patchCustomerById(UUID id, Customer customer);
+	void patchCustomerById(UUID id, CustomerDto customer);
 
 	void deleteCustomerById(UUID id);
 	

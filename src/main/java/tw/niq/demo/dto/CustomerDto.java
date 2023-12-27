@@ -1,4 +1,4 @@
-package tw.niq.demo.domain;
+package tw.niq.demo.dto;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class Customer {
+public class CustomerDto {
 
     private String name;
     

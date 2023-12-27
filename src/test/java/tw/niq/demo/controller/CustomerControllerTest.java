@@ -35,8 +35,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import tw.niq.demo.domain.Beer;
-import tw.niq.demo.domain.Customer;
+import tw.niq.demo.dto.BeerDto;
+import tw.niq.demo.dto.CustomerDto;
 import tw.niq.demo.service.CustomerService;
 import tw.niq.demo.service.CustomerServiceImpl;
 
@@ -53,15 +53,15 @@ class CustomerControllerTest {
 	ArgumentCaptor<UUID> uuidArgumentCaptor;
 	
 	@Captor
-	ArgumentCaptor<Customer> customerArgumentCaptor;
+	ArgumentCaptor<CustomerDto> customerArgumentCaptor;
 	
 	CustomerServiceImpl customerServiceImpl;
 	
 	ObjectMapper objectMapper;
 	
-	List<Customer> testCustomers;
+	List<CustomerDto> testCustomers;
 	
-	Customer testCustomer;
+	CustomerDto testCustomer;
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -105,10 +105,10 @@ class CustomerControllerTest {
 	@Test
 	void testCreateCustomer() throws JsonProcessingException, Exception {
 		
-		Customer customer = testCustomer;
+		CustomerDto customer = testCustomer;
 		customer.setId(null);
 		
-		given(customerService.createCustomer(any(Customer.class))).willReturn(testCustomers.get(1));
+		given(customerService.createCustomer(any(CustomerDto.class))).willReturn(testCustomers.get(1));
 		
 		mockMvc.perform(post(CustomerController.PATH_V1_CUSTOMER)
 				.content(objectMapper.writeValueAsString(customer))
@@ -125,7 +125,7 @@ class CustomerControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNoContent());
 		
-		verify(customerService).updateCustomerById(any(UUID.class), any(Customer.class));
+		verify(customerService).updateCustomerById(any(UUID.class), any(CustomerDto.class));
 	}
 
 	@Test

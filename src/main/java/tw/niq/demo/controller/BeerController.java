@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import tw.niq.demo.domain.Beer;
+import tw.niq.demo.dto.BeerDto;
 import tw.niq.demo.service.BeerService;
 
 @RequiredArgsConstructor
@@ -31,21 +31,21 @@ public class BeerController {
 	private final BeerService beerService;
 
 	@GetMapping
-	public List<Beer> getBeers() {
+	public List<BeerDto> getBeers() {
 		
 		return beerService.getBeers();
 	}
 
 	@GetMapping("/{beerId}")
-	public Beer getBeerById(@PathVariable("beerId") UUID id) {
+	public BeerDto getBeerById(@PathVariable("beerId") UUID id) {
 		
 		return beerService.getBeerById(id);
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> createBeer(@RequestBody Beer beer) {
+	public ResponseEntity<Void> createBeer(@RequestBody BeerDto beer) {
 		
-		Beer createdBeer = beerService.createBeer(beer);
+		BeerDto createdBeer = beerService.createBeer(beer);
 
 		HttpHeaders headers = new HttpHeaders();
 		
@@ -55,7 +55,7 @@ public class BeerController {
 	}
 
 	@PutMapping("/{beerId}")
-	public ResponseEntity<Void> updateBeerById(@PathVariable("beerId") UUID id, @RequestBody Beer beer) {
+	public ResponseEntity<Void> updateBeerById(@PathVariable("beerId") UUID id, @RequestBody BeerDto beer) {
 		
 		beerService.updateBeerById(id, beer);
 
@@ -63,7 +63,7 @@ public class BeerController {
 	}
 
 	@PatchMapping("/{beerId}")
-	public ResponseEntity<Void> patchBeerById(@PathVariable("beerId") UUID id, @RequestBody Beer beer) {
+	public ResponseEntity<Void> patchBeerById(@PathVariable("beerId") UUID id, @RequestBody BeerDto beer) {
 		
 		beerService.patchBeerById(id, beer);
 

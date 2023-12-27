@@ -3,19 +3,19 @@ package tw.niq.demo.service;
 import java.util.List;
 import java.util.UUID;
 
-import tw.niq.demo.domain.Beer;
+import tw.niq.demo.dto.BeerDto;
 
 public interface BeerService {
 	
-	List<Beer> getBeers();
+	List<BeerDto> getBeers();
 
-	Beer getBeerById(UUID id);
+	BeerDto getBeerById(UUID id);
 
-	Beer createBeer(Beer beer);
+	BeerDto createBeer(BeerDto beer);
 
-	void updateBeerById(UUID id, Beer beer);
+	void updateBeerById(UUID id, BeerDto beer);
 
-	void patchBeerById(UUID id, Beer beer);
+	void patchBeerById(UUID id, BeerDto beer);
 
 	void deleteBeerById(UUID id);
 	
