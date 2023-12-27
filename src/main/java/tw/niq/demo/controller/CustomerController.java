@@ -22,17 +22,18 @@ import tw.niq.demo.service.CustomerService;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(CustomerController.PATH)
+@RequestMapping(CustomerController.PATH_V1_CUSTOMER)
 public class CustomerController {
 
-	public static final String PATH = "/api/v1/customer";
+	public static final String PATH_V1_CUSTOMER= "/api/v1/customer";
+	public static final String PATH_V1_CUSTOMER_ID = PATH_V1_CUSTOMER + "/{customerId}";
 
 	private final CustomerService customerService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public List<Customer> listAllCustomers() {
+	public List<Customer> getCustomers() {
 
-		return customerService.getAllCustomers();
+		return customerService.getCustomers();
 	}
 
 	@RequestMapping(value = "/{customerId}", method = RequestMethod.GET)
@@ -42,20 +43,20 @@ public class CustomerController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> handlePost(@RequestBody Customer customer) {
+	public ResponseEntity<Void> createCustomer(@RequestBody Customer customer) {
 
-		Customer savedCustomer = customerService.saveNewCustomer(customer);
+		Customer savedCustomer = customerService.createCustomer(customer);
 
 		HttpHeaders headers = new HttpHeaders();
 
 		headers.add(HttpHeaders.LOCATION,
-				String.format("%s/%s", CustomerController.PATH, savedCustomer.getId().toString()));
+				String.format("%s/%s", CustomerController.PATH_V1_CUSTOMER, savedCustomer.getId().toString()));
 
 		return new ResponseEntity<>(headers, HttpStatus.CREATED);
 	}
 
 	@PutMapping("{customerId}")
-	public ResponseEntity<Void> updateCustomerByID(@PathVariable("customerId") UUID id, @RequestBody Customer customer) {
+	public ResponseEntity<Void> updateCustomerById(@PathVariable("customerId") UUID id, @RequestBody Customer customer) {
 
 		customerService.updateCustomerById(id, customer);
 

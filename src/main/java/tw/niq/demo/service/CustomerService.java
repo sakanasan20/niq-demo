@@ -7,11 +7,11 @@ import tw.niq.demo.domain.Customer;
 
 public interface CustomerService {
 
-	List<Customer> getAllCustomers();
+	List<Customer> getCustomers();
 
 	Customer getCustomerById(UUID id);
 
-	Customer saveNewCustomer(Customer customer);
+	Customer createCustomer(Customer customer);
 
 	void updateCustomerById(UUID id, Customer customer);
 

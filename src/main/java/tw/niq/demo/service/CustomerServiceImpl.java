@@ -47,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public List<Customer> getAllCustomers() {
+	public List<Customer> getCustomers() {
 		
 		return new ArrayList<>(customerMap.values());
 	}
@@ -59,7 +59,7 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public Customer saveNewCustomer(Customer customer) {
+	public Customer createCustomer(Customer customer) {
 
 		Customer savedCustomer = Customer.builder()
 				.id(UUID.randomUUID())

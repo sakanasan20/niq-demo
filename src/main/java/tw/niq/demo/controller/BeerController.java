@@ -22,17 +22,18 @@ import tw.niq.demo.service.BeerService;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(BeerController.PATH)
+@RequestMapping(BeerController.PATH_V1_BEER)
 public class BeerController {
 
-	public static final String PATH = "/api/v1/beer";
+	public static final String PATH_V1_BEER = "/api/v1/beer";
+	public static final String PATH_V1_BEER_ID = PATH_V1_BEER + "/{beerId}";
 
 	private final BeerService beerService;
 
 	@GetMapping
-	public List<Beer> listBeers() {
+	public List<Beer> getBeers() {
 		
-		return beerService.listBeers();
+		return beerService.getBeers();
 	}
 
 	@GetMapping("/{beerId}")
@@ -42,19 +43,19 @@ public class BeerController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> handlePost(@RequestBody Beer beer) {
+	public ResponseEntity<Void> createBeer(@RequestBody Beer beer) {
 		
-		Beer savedBeer = beerService.saveNewBeer(beer);
+		Beer createdBeer = beerService.createBeer(beer);
 
 		HttpHeaders headers = new HttpHeaders();
 		
-		headers.add(HttpHeaders.LOCATION, String.format("%s/%s", BeerController.PATH, savedBeer.getId().toString()));
+		headers.add(HttpHeaders.LOCATION, BeerController.PATH_V1_BEER + "/" + createdBeer.getId().toString());
 
 		return new ResponseEntity<>(headers, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{beerId}")
-	public ResponseEntity<Void> updateById(@PathVariable("beerId") UUID id, @RequestBody Beer beer) {
+	public ResponseEntity<Void> updateBeerById(@PathVariable("beerId") UUID id, @RequestBody Beer beer) {
 		
 		beerService.updateBeerById(id, beer);
 
@@ -62,7 +63,7 @@ public class BeerController {
 	}
 
 	@PatchMapping("/{beerId}")
-	public ResponseEntity<Void> updateBeerPatchById(@PathVariable("beerId") UUID id, @RequestBody Beer beer) {
+	public ResponseEntity<Void> patchBeerById(@PathVariable("beerId") UUID id, @RequestBody Beer beer) {
 		
 		beerService.patchBeerById(id, beer);
 
@@ -70,9 +71,9 @@ public class BeerController {
 	}
 	
     @DeleteMapping("/{beerId}")
-    public ResponseEntity<Void> deleteById(@PathVariable("beerId") UUID id) {
+    public ResponseEntity<Void> deleteBeerById(@PathVariable("beerId") UUID id) {
 
-        beerService.deleteById(id);
+        beerService.deleteBeerById(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

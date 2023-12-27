@@ -65,7 +65,7 @@ public class BeerServiceImpl implements BeerService {
 	}
 
 	@Override
-	public List<Beer> listBeers() {
+	public List<Beer> getBeers() {
 		
 		return new ArrayList<>(beerMap.values());
 	}
@@ -77,9 +77,9 @@ public class BeerServiceImpl implements BeerService {
 	}
 
 	@Override
-	public Beer saveNewBeer(Beer beer) {
+	public Beer createBeer(Beer beer) {
 		
-		Beer savedBeer = Beer.builder()
+		Beer createdBeer = Beer.builder()
 				.id(UUID.randomUUID())
 				.createdDate(LocalDateTime.now())
 				.updateDate(LocalDateTime.now())
@@ -90,9 +90,9 @@ public class BeerServiceImpl implements BeerService {
 				.price(beer.getPrice())
 				.build();
 
-		beerMap.put(savedBeer.getId(), savedBeer);
+		beerMap.put(createdBeer.getId(), createdBeer);
 
-		return savedBeer;
+		return createdBeer;
 	}
 
 	@Override
@@ -133,7 +133,7 @@ public class BeerServiceImpl implements BeerService {
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteBeerById(UUID id) {
 		beerMap.remove(id);
 	}
 

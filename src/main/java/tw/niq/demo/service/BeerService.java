@@ -7,16 +7,16 @@ import tw.niq.demo.domain.Beer;
 
 public interface BeerService {
 	
-	List<Beer> listBeers();
+	List<Beer> getBeers();
 
 	Beer getBeerById(UUID id);
 
-	Beer saveNewBeer(Beer beer);
+	Beer createBeer(Beer beer);
 
 	void updateBeerById(UUID id, Beer beer);
 
 	void patchBeerById(UUID id, Beer beer);
 
-	void deleteById(UUID id);
+	void deleteBeerById(UUID id);
 	
 }
