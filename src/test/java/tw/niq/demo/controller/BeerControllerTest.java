@@ -35,6 +35,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tw.niq.demo.domain.Beer;
+import tw.niq.demo.exception.NotFoundException;
 import tw.niq.demo.service.BeerService;
 import tw.niq.demo.service.BeerServiceImpl;
 
@@ -98,6 +99,15 @@ class BeerControllerTest {
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.id", is(testBeer.getId().toString())))
 				.andExpect(jsonPath("$.beerName", is(testBeer.getBeerName())));
+	}
+	
+	@Test
+	void testGetBeerById_whenIdNotFound_willThrowNotFoundException() throws Exception {
+		
+		given(beerService.getBeerById(any(UUID.class))).willThrow(NotFoundException.class);
+		
+		mockMvc.perform(get(BeerController.PATH_V1_BEER_ID, UUID.randomUUID()))
+				.andExpect(status().isNotFound());
 	}
 
 	@Test
