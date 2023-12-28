@@ -11,8 +11,8 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import tw.niq.demo.domain.BeerStyle;
 import tw.niq.demo.dto.BeerDto;
+import tw.niq.demo.entity.BeerStyle;
 
 @Service
 public class BeerServiceImpl implements BeerService {

@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import lombok.Builder;
 import lombok.Data;
-import tw.niq.demo.domain.BeerStyle;
+import tw.niq.demo.entity.BeerStyle;
 
 @Builder
 @Data
@@ -15,6 +15,10 @@ public class BeerDto {
 	private UUID id;
 	
 	private Integer version;
+	
+	private LocalDateTime createdDate;
+	
+	private LocalDateTime updateDate;
 	
 	private String beerName;
 	
@@ -25,9 +29,5 @@ public class BeerDto {
 	private Integer quantityOnHand;
 	
 	private BigDecimal price;
-	
-	private LocalDateTime createdDate;
-	
-	private LocalDateTime updateDate;
 	
 }

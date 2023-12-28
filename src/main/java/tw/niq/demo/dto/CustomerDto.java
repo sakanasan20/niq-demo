@@ -10,9 +10,9 @@ import lombok.Data;
 @Data
 public class CustomerDto {
 
-    private String name;
-    
     private UUID id;
+	
+    private String name;
     
     private Integer version;
     
