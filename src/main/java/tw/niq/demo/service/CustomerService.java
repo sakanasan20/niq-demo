@@ -1,6 +1,7 @@
 package tw.niq.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import tw.niq.demo.dto.CustomerDto;
@@ -13,10 +14,10 @@ public interface CustomerService {
 
 	CustomerDto createCustomer(CustomerDto customer);
 
-	void updateCustomerById(UUID id, CustomerDto customer);
+	Optional<CustomerDto> updateCustomerById(UUID id, CustomerDto customer);
 
-	void patchCustomerById(UUID id, CustomerDto customer);
+	Optional<CustomerDto> patchCustomerById(UUID id, CustomerDto customer);
 
-	void deleteCustomerById(UUID id);
+	Boolean deleteCustomerById(UUID id);
 	
 }

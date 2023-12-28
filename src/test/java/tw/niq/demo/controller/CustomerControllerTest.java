@@ -2,7 +2,6 @@ package tw.niq.demo.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -16,9 +15,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -35,10 +37,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import tw.niq.demo.dto.BeerDto;
 import tw.niq.demo.dto.CustomerDto;
 import tw.niq.demo.service.CustomerService;
-import tw.niq.demo.service.CustomerServiceImpl;
+import tw.niq.demo.service.CustomerServiceMap;
 
 @WebMvcTest(CustomerController.class)
 class CustomerControllerTest {
@@ -55,26 +56,46 @@ class CustomerControllerTest {
 	@Captor
 	ArgumentCaptor<CustomerDto> customerArgumentCaptor;
 	
-	CustomerServiceImpl customerServiceImpl;
+	CustomerServiceMap customerServiceImpl;
 	
+	@Autowired
 	ObjectMapper objectMapper;
 	
 	List<CustomerDto> testCustomers;
 	
 	CustomerDto testCustomer;
+	
+	String testCustomerName;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		
-		customerServiceImpl = new CustomerServiceImpl();
-		
-		testCustomers = customerServiceImpl.getCustomers();
+		testCustomers = Arrays.asList(
+				CustomerDto.builder()
+						.id(UUID.randomUUID())
+						.name("Customer 1")
+						.version(1)
+						.createdDate(LocalDateTime.now())
+						.updateDate(LocalDateTime.now())
+						.build(),
+				CustomerDto.builder()
+						.id(UUID.randomUUID())
+						.name("Customer 2")
+						.version(1)
+						.createdDate(LocalDateTime.now())
+						.updateDate(LocalDateTime.now())
+						.build(),
+				CustomerDto.builder()
+						.id(UUID.randomUUID())
+						.name("Customer 3")
+						.version(1)
+						.createdDate(LocalDateTime.now())
+						.updateDate(LocalDateTime.now())
+						.build());
 		
 		testCustomer = testCustomers.get(0);
 		
-		objectMapper = new ObjectMapper();
-		
-		objectMapper.findAndRegisterModules();
+		testCustomerName = "New Customer Name";
 	}
 
 	@Test
@@ -120,6 +141,8 @@ class CustomerControllerTest {
 	@Test
 	void testUpdateCustomerById() throws JsonProcessingException, Exception {
 		
+		given(customerService.updateCustomerById(any(UUID.class), any(CustomerDto.class))).willReturn(Optional.of(CustomerDto.builder().build()));
+		
 		mockMvc.perform(put(CustomerController.PATH_V1_CUSTOMER_ID, testCustomer.getId())
 				.content(objectMapper.writeValueAsString(testCustomer))
 				.contentType(MediaType.APPLICATION_JSON))
@@ -132,8 +155,9 @@ class CustomerControllerTest {
 	void testPatchCustomerById() throws JsonProcessingException, Exception {
 		
 		Map<String, Object> customerMap = new HashMap<>();
+		customerMap.put("name", testCustomerName);
 		
-		customerMap.put("name", "New Name");
+		given(customerService.patchCustomerById(any(UUID.class), any(CustomerDto.class))).willReturn(Optional.of(CustomerDto.builder().build()));
 		
 		mockMvc.perform(patch(CustomerController.PATH_V1_CUSTOMER_ID, testCustomer.getId())
 				.content(objectMapper.writeValueAsString(customerMap))
@@ -149,6 +173,8 @@ class CustomerControllerTest {
 
 	@Test
 	void testDeleteCustomerById() throws Exception {
+		
+		given(customerService.deleteCustomerById(any(UUID.class))).willReturn(true);
 		
 		mockMvc.perform(delete(CustomerController.PATH_V1_CUSTOMER_ID, testCustomer.getId())
 				.accept(MediaType.APPLICATION_JSON))

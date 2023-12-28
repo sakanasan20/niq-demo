@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -15,11 +17,11 @@ import tw.niq.demo.dto.BeerDto;
 import tw.niq.demo.entity.BeerStyle;
 
 @Service
-public class BeerServiceImpl implements BeerService {
+public class BeerServiceMap implements BeerService {
 
 	private Map<UUID, BeerDto> beerMap;
 
-	public BeerServiceImpl() {
+	public BeerServiceMap() {
 		
 		this.beerMap = new HashMap<>();
 
@@ -96,7 +98,7 @@ public class BeerServiceImpl implements BeerService {
 	}
 
 	@Override
-	public void updateBeerById(UUID id, BeerDto beer) {
+	public Optional<BeerDto> updateBeerById(UUID id, BeerDto beer) {
 		
 		BeerDto existing = beerMap.get(id);
 
@@ -104,10 +106,15 @@ public class BeerServiceImpl implements BeerService {
 		existing.setPrice(beer.getPrice());
 		existing.setUpc(beer.getUpc());
 		existing.setQuantityOnHand(beer.getQuantityOnHand());
+		
+		AtomicReference<Optional<BeerDto>> atomicReference = new AtomicReference<>();
+		atomicReference.set(Optional.of(existing));
+		
+		return atomicReference.get();
 	}
 
 	@Override
-	public void patchBeerById(UUID id, BeerDto beer) {
+	public Optional<BeerDto> patchBeerById(UUID id, BeerDto beer) {
 		
 		BeerDto existing = beerMap.get(id);
 
@@ -130,11 +137,17 @@ public class BeerServiceImpl implements BeerService {
 		if (StringUtils.hasText(beer.getUpc())) {
 			existing.setUpc(beer.getUpc());
 		}
+		
+		AtomicReference<Optional<BeerDto>> atomicReference = new AtomicReference<>();
+		atomicReference.set(Optional.of(existing));
+		
+		return atomicReference.get();
 	}
 
 	@Override
-	public void deleteBeerById(UUID id) {
+	public Boolean deleteBeerById(UUID id) {
 		beerMap.remove(id);
+		return true;
 	}
 
 }

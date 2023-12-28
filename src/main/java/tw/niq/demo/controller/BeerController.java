@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import tw.niq.demo.dto.BeerDto;
+import tw.niq.demo.exception.NotFoundException;
 import tw.niq.demo.service.BeerService;
 
 @RequiredArgsConstructor
@@ -57,7 +58,9 @@ public class BeerController {
 	@PutMapping("/{beerId}")
 	public ResponseEntity<Void> updateBeerById(@PathVariable("beerId") UUID id, @RequestBody BeerDto beer) {
 		
-		beerService.updateBeerById(id, beer);
+		if (beerService.updateBeerById(id, beer).isEmpty()) {
+			throw new NotFoundException();
+		}
 
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
@@ -65,7 +68,9 @@ public class BeerController {
 	@PatchMapping("/{beerId}")
 	public ResponseEntity<Void> patchBeerById(@PathVariable("beerId") UUID id, @RequestBody BeerDto beer) {
 		
-		beerService.patchBeerById(id, beer);
+		if (beerService.patchBeerById(id, beer).isEmpty()) {
+			throw new NotFoundException();
+		}
 
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
@@ -73,7 +78,9 @@ public class BeerController {
     @DeleteMapping("/{beerId}")
     public ResponseEntity<Void> deleteBeerById(@PathVariable("beerId") UUID id) {
 
-        beerService.deleteBeerById(id);
+        if (!beerService.deleteBeerById(id)) {
+        	throw new NotFoundException();
+        }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

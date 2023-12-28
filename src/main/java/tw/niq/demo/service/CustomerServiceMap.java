@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -13,11 +15,11 @@ import org.springframework.util.StringUtils;
 import tw.niq.demo.dto.CustomerDto;
 
 @Service
-public class CustomerServiceImpl implements CustomerService {
+public class CustomerServiceMap implements CustomerService {
 
 	private Map<UUID, CustomerDto> customerMap;
 
-	public CustomerServiceImpl() {
+	public CustomerServiceMap() {
 		CustomerDto customer1 = CustomerDto.builder()
 				.id(UUID.randomUUID())
 				.name("Customer 1")
@@ -75,27 +77,39 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public void updateCustomerById(UUID id, CustomerDto customer) {
+	public Optional<CustomerDto> updateCustomerById(UUID id, CustomerDto customer) {
 		
 		CustomerDto existing = customerMap.get(id);
 		
         existing.setName(customer.getName());
+        
+        AtomicReference<Optional<CustomerDto>> atomicReference = new AtomicReference<>();
+		atomicReference.set(Optional.of(existing));
+		
+		return atomicReference.get();
 	}
 
 	@Override
-	public void patchCustomerById(UUID id, CustomerDto customer) {
+	public Optional<CustomerDto> patchCustomerById(UUID id, CustomerDto customer) {
 		
 		CustomerDto existing = customerMap.get(id);
 
 		if (StringUtils.hasText(customer.getName())) {
 			existing.setName(customer.getName());
 		}
+		
+        AtomicReference<Optional<CustomerDto>> atomicReference = new AtomicReference<>();
+		atomicReference.set(Optional.of(existing));
+		
+		return atomicReference.get();
 	}
 
 	@Override
-	public void deleteCustomerById(UUID id) {
+	public Boolean deleteCustomerById(UUID id) {
 
 		customerMap.remove(id);
+		
+		return true;
 	}
 
 }
