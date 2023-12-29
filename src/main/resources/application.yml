@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${DB_URL}
+    url: jdbc:mysql://${DB_URL}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: ${DB_USR}
     password: ${DB_PWD}
     hikari:
