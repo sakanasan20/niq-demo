@@ -155,6 +155,20 @@ class BeerControllerTest {
 				.andExpect(status().isCreated())
 				.andExpect(header().exists(HttpHeaders.LOCATION));
 	}
+	
+	@Test
+	void testCreateBeer_whenBeerNameIsNull_willReturnBadRequestStatus() throws Exception {
+
+		BeerDto beer = testBeer;
+		beer.setId(null);
+		beer.setBeerName(null);
+
+		mockMvc.perform(post(BeerController.PATH_V1_BEER)
+						.content(objectMapper.writeValueAsString(beer))
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.length()", is(1)));
+	}
 
 	@Test
 	void testUpdateBeerById() throws JsonProcessingException, Exception {
@@ -167,6 +181,19 @@ class BeerControllerTest {
 				.andExpect(status().isNoContent());
 
 		verify(beerService).updateBeerById(any(UUID.class), any(BeerDto.class));
+	}
+	
+	@Test
+	void testUpdateBeerById_whenBeerNameIsBlank_willReturnBadRequestStatus() throws JsonProcessingException, Exception {
+
+		BeerDto beer = testBeer;
+		beer.setBeerName("");
+		
+		mockMvc.perform(put(BeerController.PATH_V1_BEER_ID, testBeer.getId())
+						.content(objectMapper.writeValueAsString(testBeer))
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.length()", is(1)));
 	}
 
 	@Test
@@ -186,6 +213,19 @@ class BeerControllerTest {
 
 		assertThat(testBeer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
 		assertThat(beerMap.get("beerName")).isEqualTo(beerArgumentCaptor.getValue().getBeerName());
+	}
+	
+	@Test
+	void testPatchBeerById_whenBeerNameIsBlank_willReturnBadRequestStatus() throws JsonProcessingException, Exception {
+
+		Map<String, Object> beerMap = new HashMap<>();
+		beerMap.put("beerName", "");
+
+		mockMvc.perform(patch(BeerController.PATH_V1_BEER_ID, testBeer.getId())
+						.content(objectMapper.writeValueAsString(beerMap))
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.length()", is(1)));
 	}
 
 	@Test

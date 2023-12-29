@@ -1,9 +1,16 @@
 package tw.niq.demo.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -11,8 +18,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.transaction.Transactional;
 import tw.niq.demo.dto.BeerDto;
@@ -28,6 +43,14 @@ class BeerControllerIT {
 	@Autowired
 	BeerRepository beerRepository;
 	
+	@Autowired
+    ObjectMapper objectMapper;
+	
+	@Autowired
+	WebApplicationContext wac;
+	
+	MockMvc mockMvc;
+	
 	BeerDto testBeer;
 	
 	UUID testBeerId;
@@ -36,6 +59,8 @@ class BeerControllerIT {
 	
 	@BeforeEach
 	void setUp() throws Exception {
+		
+		mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
 		
 		testBeer = beerController.getBeers().get(0);
 		
@@ -130,6 +155,21 @@ class BeerControllerIT {
         assertThrows(NotFoundException.class, () -> {
             beerController.patchBeerById(UUID.randomUUID(), BeerDto.builder().build());
         });
+    }
+    
+    @Test
+    void testPatchBeerById_whenBeerNameTooLong_willReturnBadRequestStatus() throws JsonProcessingException, Exception {
+    	
+        Map<String, Object> beerMap = new HashMap<>();
+        beerMap.put("beerName", "New Name 1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
+
+        mockMvc.perform(patch(BeerController.PATH_V1_BEER_ID, testBeerId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerMap)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(1)))
+                .andReturn();
     }
 
     @Rollback

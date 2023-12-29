@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
 import tw.niq.demo.entity.BeerStyle;
@@ -20,6 +21,7 @@ public class BeerDto {
 	
 	private LocalDateTime updateDate;
 	
+	@NotBlank
 	private String beerName;
 	
 	private BeerStyle beerStyle;

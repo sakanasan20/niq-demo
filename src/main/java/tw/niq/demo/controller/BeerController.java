@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -44,7 +45,7 @@ public class BeerController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> createBeer(@RequestBody BeerDto beer) {
+	public ResponseEntity<Void> createBeer(@Validated @RequestBody BeerDto beer) {
 		
 		BeerDto createdBeer = beerService.createBeer(beer);
 
@@ -56,7 +57,7 @@ public class BeerController {
 	}
 
 	@PutMapping("/{beerId}")
-	public ResponseEntity<Void> updateBeerById(@PathVariable("beerId") UUID id, @RequestBody BeerDto beer) {
+	public ResponseEntity<Void> updateBeerById(@PathVariable("beerId") UUID id, @Validated @RequestBody BeerDto beer) {
 		
 		if (beerService.updateBeerById(id, beer).isEmpty()) {
 			throw new NotFoundException();
@@ -66,7 +67,7 @@ public class BeerController {
 	}
 
 	@PatchMapping("/{beerId}")
-	public ResponseEntity<Void> patchBeerById(@PathVariable("beerId") UUID id, @RequestBody BeerDto beer) {
+	public ResponseEntity<Void> patchBeerById(@PathVariable("beerId") UUID id, @Validated @RequestBody BeerDto beer) {
 		
 		if (beerService.patchBeerById(id, beer).isEmpty()) {
 			throw new NotFoundException();
