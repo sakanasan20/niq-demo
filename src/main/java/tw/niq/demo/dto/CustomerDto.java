@@ -11,13 +11,15 @@ import lombok.Data;
 public class CustomerDto {
 
     private UUID id;
-	
-    private String name;
     
     private Integer version;
     
     private LocalDateTime createdDate;
     
     private LocalDateTime updateDate;
+    
+    private String name;
+    
+    private String email;
 	
 }
